@@ -46,9 +46,10 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
 ## Sample Complete Pipeline Diagram for an application deployed to Kubernetes
 - ![K8S-Deployment-CICD-Terraform](https://github.com/user-attachments/assets/f2a2d018-d200-48fb-9b1d-3614dd503063)
 
-### Setting UP CI/CD
+## Setting UP CI/CD
 
-1. Create Jenkins & Setup-configure
+### Create Jenkins & Setup-configure
+
 -	T2.large (both master & Client in one server)
 -	Port 8080
 -	Update the Ubuntu OS
@@ -84,7 +85,8 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
     - jdk - name (`jdk17`)
     - NodeJs - name(`node-18`)
     
-2. Create SonarQube & Setup-configure
+### Create SonarQube & Setup-configure
+
 -	Port 9000
 -	T2.medium
 -	Install docker - sudo apt install docker.io
@@ -105,7 +107,8 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
 -	To Add the Sonar Server IP in Jenkins : In the Jenkins: Manage Jenkins – systems – select SonarQube server(make sure the plugins are installed already) – name(sonar-server) – url(sonar_server_ip:9000) – Add the sonar token
 
 
-3. Create Nexus & Setup-configure 
+### Create Nexus & Setup-configure 
+
 -	Port 8081
 -	T2.medium ( min 4GB RAM )
 
