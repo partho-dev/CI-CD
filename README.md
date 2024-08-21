@@ -41,7 +41,7 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
                       version: '1.0.0'
 
 ```
-- GitHub is a repository of the source code Similarly nexus is a repository of build code like dist folder 
+- GitHub is a repository of the source code Similarly nexus is a repository of artifects like `dist`(Javascript based application like Angular) or `target folder`(Java bases application) `.Next`(for next application) 
 
 ## Sample Complete Pipeline Diagram for an application deployed to Kubernetes
 - ![K8S-Deployment-CICD-Terraform](https://github.com/user-attachments/assets/f2a2d018-d200-48fb-9b1d-3614dd503063)
