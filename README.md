@@ -118,20 +118,22 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
 -	sudo docker run -d -p 8081:8081 sonartype/nexus3
 
 - Without Docker, install directly on FS
-- install Java first - `sudo apt install openjdk-8-jre-headless`
-- create a `nexus` user - `sudo adduser --disabled-login --no-create-home --gecos "" nexus`
+- install Java first - `sudo apt install openjdk-17-jre-headless`
+- create a `nexus` user - `sudo adduser --system --no-create-home --disabled-login --gecos "" nexus`
 - download the installation files
 ```
 cd /opt
 sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
-tar -zxvf latest-unix.tar.gz
+sudo tar -zxvf latest-unix.tar.gz
+
 ```
 - Change the user ownwrship of nexus
 ```
 cd /opt
-sudo mv nexus-3.65.0-02/ nexus
-sudo chown -R nexus:nexus /opt/nexus
+sudo mv nexus-3.* nexus
+sudo mkdir -p /opt/sonatype-work
 sudo chown -R nexus:nexus /opt/sonatype-work
+sudo chown -R nexus:nexus /opt/nexus /opt/sonatype-work
 ```
 - Add the `nexus` user to run the nexus
 ```
@@ -140,11 +142,11 @@ sudo vim  /opt/nexus/bin/nexus.rc
 Add the following line:
 run_as_user="nexus" 
 ```
-- Login with `nexus` user - `su - nexus`
-- Start the Nexus - `/opt/nexus-3.38.1-01/bin/nexus start`
+### Start the Nexus
+- `sudo -u nexus /opt/nexus/bin/nexus start`
+
+### Verify if its running
 - Verify the nexus running - `ps aux | grep nexus`
-
-
 
 -	**`Configuration`**
 -	ip_address:8081
