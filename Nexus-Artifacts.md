@@ -6,6 +6,9 @@
 - So, to store all these artifacts we need a repository and one of those repositories is `Nexus`
 - `Nexus` is one of the products of a company called `sonatype`
 
+- Here is a list of programing language and its tool needed to build
+- <img width="711" alt="Nexus" src="https://github.com/user-attachments/assets/48e7e101-9cf9-496d-b513-16aa49939d61">
+
 ### Why do we need a repository, we can directly push the artifacts to our deployment server
 - Ok, so, we need to understand, deployment is a different process and that comes under `CD`
 - & the Creating the artifacts is coming under `CI`

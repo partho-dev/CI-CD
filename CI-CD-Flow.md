@@ -153,9 +153,9 @@ run_as_user="nexus"
 -	admin / [go inside docker container and find the pass ]
 -	setup a new password
 
-### How to build connection between Nexus & Jenkins
+### How to build connection between Nexus & Jenkins for Java based applications
 
--   Build a connection between `Jenkins` & `Nexus`, which will help Jenkins to push the code package (`JAR/dist`) artifacts into Nexus
+-   Build a connection between `Jenkins` & `Nexus`, which will help Jenkins to push the code package (`JAR`) artifacts into Nexus
 
 -   **`Java based app`** : For adding the `Nexus URL`, go to Java source code and fine `pom.xml`
 - at the end of POM.XML. add the `maven-release` &  `maven-snapshots` under `<distributionManagement>`
@@ -236,8 +236,8 @@ stage('Push_to_Nexus') {
 -	Trivy to scan the /server/src directory for vulnerabilities and generate an HTML report.
 
 5. Create Pipleline on Jenkins
-Pipeline to Create EKS Cluster
-    Pipeline to deploy the application
+- Pipeline to Create EKS Cluster
+    - Pipeline to deploy the application
 - Each tool/plugins that needs to be configured in the Pipeline. It needs to be configured with tool block on the pipeline
 
 - Tools block in Jenkins

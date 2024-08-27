@@ -97,6 +97,19 @@ sudo apt install nodejs npm -y
 - Run the Express.js Application: `npm start`
 
 
+## How to disable annonymous user access to Nexus and download nom packages
+- Go to Nexus - under settings, click `"Annonymous Access"`
+- Disable the access
+- Now, the npm install express from the Nexus would fail 
+- Create a user (npm-user/password) to download the npm, and give it a privilege as `npm-read-role`
+- Encode the creds in base 64 - `echo -n "npm-user:password" | base64`
+- This will give the token - `bnBtLXVzZXI6cGFzc3dvcmQ=`
+- On the Developer laptop, set this user who has permission to download the packages
+    - `npm config set _auth="bnBtLXVzZXI6cGFzc3dvcmQ="`
+- verify that on `.npmrc` file - `cat ~/.npmrc`
+- try to install a package, if this gives any error related to `_auth` variable, just change the variable name from `vi .nmrc`
+
+
 ### Step no - 7: Why do we need private package.
 - One of the main purposes to have a private repo is to host the custom packages that are created within the organization and used for the organisations.
 - Example, we have `express`, `cors` and they are public packages
