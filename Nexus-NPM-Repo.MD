@@ -84,6 +84,57 @@ sudo apt install nodejs npm -y
 
 - Run the Express.js Application: `npm start`
 
+
+### Step no - 7: Why do we need private package.
+- One of the main purposes to have a private repo is to host the custom packages that are created within the organization and used for the organisations.
+- Example, we have `express`, `cors` and they are public packages
+- Sometime, we need to have our own private packages which solves some specific problem
+
+### Lets take an example of creating a private npm package named `my-private-package`
+- Create a folder & a name of package is the name of the folder
+```
+mkdir my-private-package
+cd my-private-package
+```
+- Initialise the project in that folder - `npm init`
+- Add all the files and logic in the code
+- Example one file is `index.js` and it would have other controller files etc
+```
+// index.js
+module.exports = function() {
+    console.log('Hello from my private package!')
+}
+
+```
+- This would update the package.json like this 
+```
+{
+  "name": "my-private-package",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Partho",
+  "license": "MIT"
+}
+
+```
+- Now this developer will push his private pacjage to the nexus for the other developers
+```
+- npm set registry http://<your-nexus-ip>:8081/repository/npm-repo/
+- npm login --registry=http://<your-nexus-ip>:8081/repository/npm-repo/
+- npm publish --registry=http://<your-nexus-ip>:8081/repository/npm-repo/
+```
+
+- Another Developr is using this private package 
+- `npm install my-private-package --registry=http://<your-nexus-ip>:8081/repository/npm-repo/`
+```
+const myPrivatePackage = require('my-private-package');
+myPrivatePackage();
+
+```
+- This will log Hello from my private package! to the console.
+
+
+
 ### Million Dollar Question
 - We are not allowing the developers to download package from public npm.org, but we are directing them
 - to download the package from Nexus repo
