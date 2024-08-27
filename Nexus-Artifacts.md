@@ -24,6 +24,44 @@
     - Repository Manager helps proxy any remote repositories & caches its content locally for further use by the internal orgs
     - Maintains a repo for its own internal artifacts
 
+### How to Install Nexus on Ubuntu 
+
+- install Java first - `sudo apt install openjdk-17-jre-headless`
+- create a `nexus` user - `sudo adduser --system --no-create-home --disabled-login --gecos "" nexus`
+- download the installation files
+```
+cd /opt
+sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+sudo tar -zxvf latest-unix.tar.gz
+
+```
+- Change the user ownwrship of nexus
+```
+cd /opt
+sudo mv nexus-3.* nexus
+sudo mkdir -p /opt/sonatype-work
+sudo chown -R nexus:nexus /opt/sonatype-work
+sudo chown -R nexus:nexus /opt/nexus /opt/sonatype-work
+```
+- Add the `nexus` user to run the nexus
+```
+sudo vim  /opt/nexus/bin/nexus.rc
+
+Add the following line:
+run_as_user="nexus" 
+```
+### Start the Nexus
+- `sudo -u nexus /opt/nexus/bin/nexus start`
+
+### Verify if its running
+- Verify the nexus running - `ps aux | grep nexus`
+
+-	**`Configuration`**
+-	ip_address:8081
+-	admin / [go inside docker container and find the pass ]
+-	setup a new password
+
+
 ### What are the different types of Repositories Nexus has
 
 - ![Nexus-Repo](https://github.com/user-attachments/assets/894a8326-56c7-4b26-8cba-7e62dba7163b)
