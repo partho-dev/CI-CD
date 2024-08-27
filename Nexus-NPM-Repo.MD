@@ -39,7 +39,8 @@ sudo apt update
 sudo apt install nodejs npm -y
 ```
 
-- Step 5: Configure NPM to Use Nexus Repository
+- Step 5: Configure NPM to Use Nexus Repository on the Developer Laptop
+    - If this is not done, the developer laptop will go to internet https://registry.npmjs.org/ and download the packages
 
     - For the Hosted Repository:
         - `npm set registry http://3.16.26.143:8081/repository/npm-repo/`
@@ -82,3 +83,26 @@ sudo apt install nodejs npm -y
         - They should be pulled from Nexus if available.
 
 - Run the Express.js Application: `npm start`
+
+### Million Dollar Question
+- We are not allowing the developers to download package from public npm.org, but we are directing them
+- to download the package from Nexus repo
+- But, behind the scene, the nexus downloads all the packages and stores on its storage
+- Which the developers download
+- Then whats the purpose & benifit
+
+### Benefits of Redirecting NPM Requests Through Nexus
+
+- Control and Governance:
+        Security: approve packages before they are available to the developers. This prevents unauthorized or malicious packages from being used.
+        Licensing Compliance: enforce to use the package which compy with orgs standard
+
+- Caching:
+        Speed: Once a package is downloaded by Nexus, subsequent requests from any developer in your organization will be served by Nexus, reducing download times and bandwidth usage. So saves cost of internet usage as most of the orgs uses private network.
+        Offline Access: If the public NPM registry is down or temporarily unavailable, developers can still access cached packages from Nexus.
+
+- Consistency:
+        Version Control: Nexus can store specific versions of packages, ensuring that all developers use the same versions, which is critical for consistent builds and deployments.
+
+- Audit and Monitoring:
+        Tracking: Nexus provides logs and reports on package usage, which can be valuable for auditing and understanding dependency usage within your organization.
