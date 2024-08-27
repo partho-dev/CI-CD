@@ -1,3 +1,7 @@
+### How to know on my local laptop if I am using public or private npm repo
+- Go to the npm project cd express_js_project
+- type `npm config get registry` - `https://registry.npmjs.org/` # This is public Repo
+- To update that to use private repo - `npm config set registry=https://private_repo_URL`
 ## Create a Private Nexus Repo for Docker images
 
 - Step 1: `Create an NPM Hosted Repository`
@@ -78,6 +82,14 @@ sudo apt install nodejs npm -y
     - If the package.json contains dependencies(nodemon, dotenv etc), they will be fetched from the Nexus repository:
 
     - Install Dependencies: `npm install`
+
+    - For example the developer wants to install `express` package from Nexus group repo
+    - `npm install express --registry http://3.16.26.143:8081/repository/npm-all/`
+
+    - For any private package - `npm install my_private_package --registry http://3.16.26.143:8081/repository/npm-all/`
+
+    - But, instead of using the regitsry name on every package installation, we can set the config as explained on `Step -5`
+
     - Verify the Installation: 
         - Make sure all dependencies are correctly installed. 
         - They should be pulled from Nexus if available.
