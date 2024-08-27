@@ -110,3 +110,43 @@ run_as_user="nexus"
     - The tests are performed on the staging repo and if it passes all the tests, vulnerability tests,
     - The artifacts gets `promoted` into production repository to be used by prod deployment
 
+
+## How to instruct the developers to connect to the private repo
+- We have to inform all the developers to update their local machine to set for the private repo
+
+- **NPM Repo**
+- For `npm` : npm set registry http://3.16.26.143:8081/repository/npm-all/
+
+- **For Maven Repo**
+- for Java - mvn : 
+    - For Maven, developers need to update their `settings.xml` file to point to the Nexus repository. 
+    - This file is typically located in` ~/.m2/settings.xml.`
+    - Add a <mirror> entry to the settings.xml file
+    -  `mirrorOf` with a value of `*` means this mirror will be used for all repositories.
+    - The url should point to the Nexus Maven repository.
+
+    ```
+            <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                                    https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <mirrors>
+                <mirror>
+                    <id>nexus</id>
+                    <mirrorOf>*</mirrorOf>
+                    <url>http://3.16.26.143:8081/repository/maven-all/</url>
+                </mirror>
+                </mirrors>
+            </settings>
+    ```
+- **For Docker Repo**
+- Edit the Docker daemon configuration file, found at `/etc/docker/daemon.json`, 
+- and add the Nexus repository as an insecure registry:
+```
+{
+  "insecure-registries": ["http://3.16.26.143:8091"]
+}
+
+```
+- Restart Docker - `sudo systemctl restart docker`
+- Login to Nexus Repo - `docker login 3.16.26.143:8091`
