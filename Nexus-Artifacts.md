@@ -103,6 +103,12 @@ run_as_user="nexus"
     - `Performance Optimization`: Monitor performance and optimize settings as needed.
     - `Version Control`: Use version control for Nexus configuration to track changes and facilitate rollback.
     - `Backup and Recovery`: Implement a robust backup and recovery plan to protect your repository data.
+        - Backup: Regularly back up the sonatype-work directory, which includes all configuration, repositories, and other important data.
+        - Automate using CRON
+        - `tar -czvf nexus-backup.tar.gz /opt/sonatype-work/`
+
+        - Restore: To restore, simply extract the backup on the target server in the appropriate location and start the Nexus service.
+        - `tar -xzvf nexus-backup.tar.gz -C /opt/`
 
 - Promotion of repository
     - When we build an artifacts, that build does not get used in the production deployment
@@ -165,13 +171,23 @@ run_as_user="nexus"
 sudo apt-get update -y
 
 # Install Java (OpenJDK 17)
-sudo apt install openjdk-17-jre-headless
+sudo apt-get install -y openjdk-17-jre-headless
+
+# Verify Java installation
+if ! java -version; then
+    echo "Java installation failed!"
+    exit 1
+fi
 
 # Create a 'nexus' user with no login permissions and no home directory
 sudo adduser --disabled-login --no-create-home --gecos "" nexus
 
+# Create the sonatype-work directory
+sudo mkdir -p /opt/sonatype-work
+sudo chown -R nexus:nexus /opt/sonatype-work
+
 # Navigate to /opt and download the Nexus installation files
-cd /opt
+cd /opt || exit
 sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
 
 # Extract the downloaded tar.gz file
@@ -217,10 +233,20 @@ sudo systemctl start nexus
 # Wait for Nexus to fully start up (this can take a few minutes)
 sleep 120
 
-# Optionally, you can check if the service is running (Uncomment the below line if required)
-# ps aux | grep nexus
+# Check if Nexus is running
+if systemctl status nexus | grep -q "active (running)"; then
+    echo "Nexus is running!"
+else
+    echo "Nexus failed to start!"
+    exit 1
+fi
 
 # Output the Nexus initial admin password (Optional)
-# echo "Nexus initial admin password is located at: /opt/sonatype-work/nexus3/admin.password"
-# cat /opt/sonatype-work/nexus3/admin.password
+if [ -f /opt/sonatype-work/nexus3/admin.password ]; then
+    echo "Nexus initial admin password is located at: /opt/sonatype-work/nexus3/admin.password"
+    cat /opt/sonatype-work/nexus3/admin.password
+else
+    echo "Nexus admin password file not found!"
+fi
+
 ```
