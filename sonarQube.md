@@ -189,7 +189,8 @@ sonar.login=your_sonarqube_token
 `----------------------------------------------------------------------------------------------------------------------------`
 
 ## Contaianerised the Sonar
-- See the deployment files inside the folder `sonarQube-container-eks`
+- See the deployment files inside the folder `sonarQube-container-eks` 
+- From this link - `https://github.com/partho-dev/CI-CD/tree/main/sonarQube-container-eks`
 
 ### For Local K8s deployment (minikube or kind)
 - 1. kubectl apply -f deployment-postgreSQL.yaml
