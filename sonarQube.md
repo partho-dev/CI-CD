@@ -167,7 +167,7 @@ sonar.login=your_sonarqube_token
 - <img width="1451" alt="sonar-result" src="https://github.com/user-attachments/assets/40ae1318-7ff1-4e38-af94-f15ec91b8573">
 
 
-`------------------------------------------------------------------------------------------------------------------------------------`
+`----------------------------------------------------------------------------------------------------------------------------`
 
 ## Manual process is time consuming and error oriented.
 
@@ -185,4 +185,20 @@ sonar.login=your_sonarqube_token
 **step2**
 - <img width="910" alt="sonar-qube-dockerise-local" src="https://github.com/user-attachments/assets/952f84a1-847a-4f23-b0ab-529ec634eb54">
 
+
+`----------------------------------------------------------------------------------------------------------------------------`
+
+## Contaianerised the Sonar
+- See the deployment files inside the folder `sonarQube-container-eks`
+
+### For Local K8s deployment (minikube or kind)
+- 1. kubectl apply -f deployment-postgreSQL.yaml
+- 2. kubectl apply -f deployment-sonar.yaml
+
+### For cloud like EKS or self hosted k8s
+- We can expose using ingress object, so we will use
+- 1. kubectl apply -f deployment-postgreSQL.yaml
+- 2. deployment-sonar-ingress.yaml
+
+- <img width="665" alt="sonar-containerised" src="https://github.com/user-attachments/assets/2f1db966-d7cf-4887-b5d5-b5dad507640e">
 
