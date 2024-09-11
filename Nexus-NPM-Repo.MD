@@ -108,6 +108,13 @@ sudo apt install nodejs npm -y
     - `npm config set _auth="bnBtLXVzZXI6cGFzc3dvcmQ="`
 - verify that on `.npmrc` file - `cat ~/.npmrc`
 - try to install a package, if this gives any error related to `_auth` variable, just change the variable name from `vi .nmrc`
+- Or create a file `.npmrc` on develper laptop 
+```
+registry=https://nexus.my_domain.com/npm/
+always-auth=true
+_auth = base64encoded(username:password)
+
+```
 
 
 ### Step no - 7: Why do we need private package.

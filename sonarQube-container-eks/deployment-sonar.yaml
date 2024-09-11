@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube
+  labels:
+    app: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      containers:
+      - name: sonarqube
+        image: sonarqube:9.9.0-community
+        ports:
+        - containerPort: 9000
+        env:
+        - name: SONARQUBE_JDBC_URL
+          value: "jdbc:postgresql://postgres-service:5432/sonarqube"
+        - name: SONARQUBE_JDBC_USERNAME
+          value: "sonar"
+        - name: SONARQUBE_JDBC_PASSWORD
+          value: "sonar"
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube
+  labels:
+    app: sonarqube
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9000
+      targetPort: 9000
+  selector:
+    app: sonarqube
