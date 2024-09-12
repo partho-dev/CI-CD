@@ -36,7 +36,15 @@
 
 ### Install Velero on EKS:
 
+- Velero consists of two parts:
+
+- `Velero CLI`: Installed on your local machine (e.g., your Mac).
+- `Velero Server`: Installed inside your EKS cluster as a set of pods and Kubernetes resources (deployments, CRDs). It runs in your worker nodes (not on the EKS master/control plane since that is managed by AWS).
+- Like `kubectl` reads the `kubeconfig` and finds the info about the EKS or K8s. similarly `Velero` uses the same config file to connect with the right EKS cluster
+
 - install `Velero` and configure it with the AWS credentials to take regular backups.
+- Just like we have `kubectl` installed on mac to interact with the EKS cluster,
+- we also need the `Velero CLI` installed on mac to interact with the Velero `server component` in the Kubernetes cluster.
 
 - Add Velero CLI on Local - `brew install velero`
 
@@ -52,6 +60,9 @@ velero install \
 --use-volume-snapshots=true \
 --secret-file=<path-to-credentials-aws>
 ```
+
+- Remember - `velero` is installed on the worker nodes, not on control plane
+- It is installed as a container like other containers
 
 - Back Up the Namespace: `velero backup create devops-tools-backup --include-namespaces devops-tools`
 - Restore the Namespace: `velero restore create --from-backup devops-tools-backup`
@@ -89,4 +100,14 @@ velero install \
     - For recreating the entire infrastructure, consider using infrastructure-as-code tools like CloudFormation or Terraform to ensure the EKS cluster and related resources can be redeployed automatically.
 
 - <img width="670" alt="Backup-Tools-EKS" src="https://github.com/user-attachments/assets/29685d9e-872d-4ea6-ae34-a019a7a96cec">
+
+
+## What happens if the EKS cluster fails, the Velero also impacted
+- Velero backups are stored outside the cluster, typically in an S3 bucket (or another cloud storage provider like GCP or Azure Blob Storage). This means that even if the cluster is lost, the backups are safe because they are stored in a separate location.
+
+- In case the cluster is lost, that can be restored by:
+    - Creating a new EKS cluster.
+    - Installing Velero on the new cluster.
+    - Restoring the backups from the S3 bucket to the new cluster using the Velero CLI.
+
 
