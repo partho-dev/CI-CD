@@ -108,6 +108,6 @@ velero install \
 - In case the cluster is lost, that can be restored by:
     - Creating a new EKS cluster.
     - Installing Velero on the new cluster.
-    - Restoring the backups from the S3 bucket to the new cluster using the Velero CLI.
+    - Restoring the backups from the S3 bucket to the new cluster using the Velero CLI..
 
 
