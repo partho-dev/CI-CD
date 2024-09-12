@@ -1,0 +1,112 @@
+# Create PV on the node 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-pv
+  namespace: devops-tools
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /mnt/data/jenkins  # This will store data on the worker node's disk
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-pvc
+  namespace: devops-tools
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+  namespace: devops-tools
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts
+          ports:
+            - containerPort: 8080
+            - containerPort: 50000
+          volumeMounts:
+            - name: jenkins-volume
+              mountPath: /var/jenkins_home
+          env:
+            - name: JAVA_OPTS
+              value: "-Djenkins.install.runSetupWizard=false"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1000m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+      volumes:
+        - name: jenkins-volume
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: jenkins-service
+#   namespace: devops-tools
+#   labels:
+#     app: jenkins
+# spec:
+#   type: LoadBalancer  # Expose Jenkins externally via an ELB (if testing on EKS without ingress)
+#   ports:
+#     - port: 8080
+#       targetPort: 8080
+#       protocol: TCP
+#       name: http
+#     - port: 50000
+#       targetPort: 50000
+#       protocol: TCP
+#       name: agent
+#   selector:
+#     app: jenkins
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: devops-tools
+  labels:
+    app: jenkins
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+      nodePort: 30009
+    - port: 50000
+      targetPort: 50000
+      protocol: TCP
+      name: agent
+  selector:
+    app: jenkins

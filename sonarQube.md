@@ -166,6 +166,13 @@ sonar.login=your_sonarqube_token
 - To see the result, go to the server - `IP:9000`
 - <img width="1451" alt="sonar-result" src="https://github.com/user-attachments/assets/40ae1318-7ff1-4e38-af94-f15ec91b8573">
 
+## How to connect the sonar server with Jenkins
+-	`Create token` on Sonar which would be used on Jenkins 
+    - Admission – Security – Users – Generate a Token
+
+-	To `Add the Sonar Token in Jenkins` : 
+    - In the `Jenkins`: Manage Jenkins - credentials – global – add credentials – secret Text – Add Sonar Token in “secret” field – Give any ID to remember that its for Sonar
+-	To Add the `Sonar Server IP` in Jenkins : In the Jenkins: Manage Jenkins – systems – select SonarQube server(make sure the plugins are installed already) – name(sonar-server) – url(sonar_server_ip:9000) – Add the sonar token
 
 `----------------------------------------------------------------------------------------------------------------------------`
 
