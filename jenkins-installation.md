@@ -1,10 +1,11 @@
 ## Jenkins installation on Ubuntu 22 (Manual approach) on Ec2 
 - Update the OS - sudo apt update && sudo apt upgrade -y
-- install JAVA (Change to latest version if needed) - `sudo apt install openjdk-11-jdk -y` 
+- install JAVA (Change to latest version if needed) - `sudo apt-get install openjdk-17-jdk` 
 - to install Jenkins securely, add the GCP Key - 
 ```
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo tee \
 /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
 ```
 - Add Jenkins repo
 ```
@@ -12,6 +13,7 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
 https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
 /etc/apt/sources.list.d/jenkins.list > /dev/null
 ```
+- Update the local repo again - `sudo apt update`
 
 - install Jenkins - `sudo apt install jenkins -y`
 - start Jenkins - `sudo systemctl start jenkins`

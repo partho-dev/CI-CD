@@ -33,6 +33,8 @@
 - Backup entire namespaces, including resources like deployments, secrets, and services.
 - Schedule regular backups.
 - Restore the namespace to a new cluster or region if a failure occurs.
+- It can take backup of certain NS or all NS
+- It supports the except NS also
 
 ### Install Velero on EKS:
 
@@ -47,6 +49,8 @@
 - we also need the `Velero CLI` installed on mac to interact with the Velero `server component` in the Kubernetes cluster.
 
 - Add Velero CLI on Local - `brew install velero`
+
+## Create the S3 bucket to store the backup
 
 # Install Velero on the EKS cluster
 

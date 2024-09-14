@@ -210,3 +210,68 @@ sonar.login=your_sonarqube_token
 
 - <img width="665" alt="sonar-containerised" src="https://github.com/user-attachments/assets/2f1db966-d7cf-4887-b5d5-b5dad507640e">
 
+
+`===============================================================================`
+## Setup Jenkins with Sonarqube
+- For Jenkins know about sonar - need the `user token` from Sonar
+
+
+### How to get the Token from Sonar Server 
+- Login to Sonar server and generate the token first
+- <img width="1376" alt="sonar-token-generation" src="https://github.com/user-attachments/assets/2384e7d2-9ec1-497a-902c-d40cc5bbf226">
+- Note down the token.
+- Update this token as a SOnar credential into Jenkins server (Sonar Scanner)
+
+### Setup Jenkins for SOnar
+- Go to Jenkins
+- install the plugin - `SonarQube Scanner for Jenkins`
+- update the token to Jenkins - `manageJenkins - credentials-global- Add credentials - secret text`
+- <img width="900" alt="jenkins-sonar-token-conf" src="https://github.com/user-attachments/assets/f8690e62-f60b-4b57-b017-5779fd202f60">
+
+- Update the Jenkins to recognise the Sonar Server location - `Manage jenkins - Systems - SonarQube servers`
+- <img width="1054" alt="jenkins-sonar-server" src="https://github.com/user-attachments/assets/44f4cbab-8f38-40c3-904b-6eb4efe0520e">
+
+- Now the Jenkins is aware of Sonar server.
+
+- But, Jenkins does not know anything about the project it has to analyse, that info we have to provide
+- for that We would also need `sonar-project.properties`
+- There are two ways - (`Manually` keep inside the source code `or` `dynamicallly` create along with pipeline)
+- But keeping that manually in the source code may be challenging.
+- So, we have to create this file inside the pipeline
+```
+stage('SonarQube Analysis') {
+    steps {
+        writeFile file: 'sonar-project.properties', text: '''
+            sonar.projectKey=my-unique-project-key-${env.BUILD_ID}
+            sonar.projectName=My Application
+            sonar.sources=.
+            sonar.language=js
+            sonar.sourceEncoding=UTF-8
+        '''
+        withSonarQubeEnv('SonarQube') {
+            sh 'sonar-scanner'
+        }
+    }
+}
+```
+
+- with folder
+```
+        stage('SonarQube Analysis') {
+            steps {
+                dir('nextJs-Sample') {
+                    // Create sonar-project.properties inside 'nextJs-Sample' folder
+                    writeFile file: 'sonar-project.properties', text: '''
+                        sonar.projectKey=nextjs-sample-key-${env.BUILD_ID}
+                        sonar.projectName=NextJs Sample Project
+                        sonar.sources=.
+                        sonar.language=js
+                        sonar.sourceEncoding=UTF-8
+                    '''
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'sonar-scanner'
+                    }
+                }
+            }
+        }
+```

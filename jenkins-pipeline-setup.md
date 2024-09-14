@@ -1,3 +1,13 @@
+## Why the Jenkins in Ec2 are slow sometimes
+
+**Fix this through the UI**
+- <img width="765" alt="Jenkins-slow" src="https://github.com/user-attachments/assets/ca42e39c-d5dd-4352-8d66-4814e2c21441">
+
+**Fix the Slow issue through command**
+- cd /var/lib/jenkins/
+- update the new IP on this file - `jenkins.model.JenkinsLocationConfiguration.xml`
+
+
 ## Important security tools that can be considered in the pipeline
 
 - SonarQube (SAST)
