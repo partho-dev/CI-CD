@@ -21,9 +21,8 @@
     - This is often necessary when using HTTP instead of HTTPS.
 
     - For production environments, it's recommended to secure the Nexus instance with HTTPS to avoid using insecure registries.
-
-
-    - sudo vi /etc/docker/daemon.json
+  
+    - `sudo vi /etc/docker/daemon.json`
     ```
     {
     "insecure-registries" : ["http://3.16.26.143:8091"] 
@@ -33,6 +32,7 @@
     - Restart the Docker Daemon - `systemctl restart docker`
 
     - verify the connectivity of client(Jenkins/Docker) & the Nexus - `sudo docker login -u admin 3.16.26.143:8091` 
+    **Note** make sure the admin user has access to authenticat into the nexus
 
     - Enter the password set for the Nexus
 
@@ -56,68 +56,72 @@
 
 
 
+`========================================================`
+
+### Setup Jenkins with Nexus
+
+**On the Nexus Server**
+1. For http based nexus repo
+
+- create a user with role as upload image & autheticate the nexus
+- <img width="1024" alt="jenkins-users-nexus" src="https://github.com/user-attachments/assets/d4ac312c-5a4d-407d-a83f-158fc6cb00b7">
+
+- Create Hosted Repo for Docker on Nexus (Hosted repo)
+- <img width="943" alt="set-hosted-repo" src="https://github.com/user-attachments/assets/55881c4f-0715-42ef-9a6b-de0e02c7485e">
+- Remember the Port on which the repo is active, in our case its `8092`
+- Make sure, its active on inbound SG on Nexus
+
+- Update the realm 
+- <img width="511" alt="realm" src="https://github.com/user-attachments/assets/c5c99f82-2036-45cd-98a2-0a794be9ba30">
+
+
+**On the Jenkins**
+- install these plugins
+  - `Nexus Artifact Uploader` (To upload the build/docker image to private nexus repo)
+  - `Pipeline Utility Steps`
+
+- COnfigure the nexus cred on Jenkins Global 
+- <img width="1472" alt="jenkins-global-cred-nexus" src="https://github.com/user-attachments/assets/9a110da8-3b0c-4474-ba11-e5519c9d3974">
+
+- ssh to the Jenkins server - `ssh root@jenkins_ip`
+- `sudo vi /etc/docker/daemon.json`
+    ```
+    {
+    "insecure-registries" : ["http://Nexus-server-IP:8092"] // Change the port what is set on nexus for docker hosted repo
+    }
+
+- Now go to pipeline and update the environment and stage
+
 ## How to Automate the above using Jenkins
 
 ```
-pipeline {
-    
-    agent any
-    
     environment {
-        imageName = "Give_Image_Name"
-        registryCredentials = "admin"
-        registry = "3.16.26.143:8091"
-        dockerImage = ''
+        SONAR_HOST_URL = 'http://13.233.186.12:9000'
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = "http://54.175.95.188:8081"
+        // DOCKER_REPO = 'http://54.175.95.188:8081/repository/erg-docker-hosted-repo'
+        DOCKER_REPO = 'http://54.175.95.188:8092'
+        // DOCKER_CREDENTIALS_ID = 'nexus-docker-creds'
+        NEXUS_CREDENTIAL_ID = "jenkins-user-on-nexus"
     }
-    
-    stages {
-        stage('checkout') {
+
+            stage('Docker Push to Nexus') {
             steps {
-                git url: 'https://github.com/partho-dev/sample-code.git', branch: 'main'                  }
-        }
-    
-    // Docker images
-    stage('Docker image') {
-      steps{
-        script {
-          dockerImage = docker.build(imageName)
-        }
-      }
-    }
-
-    // Push the image from Jenkins to Nexus
-    stage('Push to Nexus') {
-     steps{  
-         script {
-            docker.withRegistry('http://' + registry, registryCredentials) {
-            dockerImage.push('latest')
-            //or 
-            //dockerImage.push("${env.BUILD_NUMBER}")
-          }
-        }
-      }
-    }
-    
-    // Run the container - Stop the container if its running
-    stage('stop previous containers') {
-         steps {
-            sh 'docker ps -f name=container_name -q | xargs --no-run-if-empty docker container stop'
-            sh 'docker container ls -a -f name=container_name -q | xargs -r docker container rm'
-         }
-       }
-      
-    stage('Docker Run') {
-       steps{
-         script {
-                sh 'docker run -d -p 3000:3000 --rm --name container_name ' + registry + '/' + imageName + ':latest'
+                echo "<=======Pushing the Docker Image to Nexus ===========>"
+                script {
+                    docker.withRegistry("${DOCKER_REPO}", "${NEXUS_CREDENTIAL_ID}") {
+                        def app = docker.image("nextjs-sample:${env.BUILD_ID}")
+                        app.push("latest")
+                        app.push("${env.BUILD_ID}")
+                    }
+                }
             }
-         }
-      }    
-    }
-}
-
+        }
 
 ```
+
+- ![image](https://github.com/user-attachments/assets/db0b8ea5-3218-4524-b796-fa649a1e8190)
 
 
 

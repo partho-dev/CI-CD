@@ -64,16 +64,17 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
 
 -	Install custom plugins
     - Manage jenkins – plugins – available plugins
-    - Pipeline Stage view (stage view is removed, so need this plugin)
-    - SonarQube Scanner 
-    - Xvfb (this helps run the cypress test on Jenkins)
+    - `Pipeline Stage view` (stage view is removed, so need this plugin)
+    - `SonarQube Scanner `
+    - `Xvfb` (this helps run the cypress test on Jenkins)
     - `Config file provider` (needed for Nexus to setup credentials)
-    - Maven (Java based)
-    - NodeJS
-    - Pipeline maven integration (Java based)
-    - Kubernetes | kubernetes credentials | kubernetes cli | lubernetes client api
-    - Docker | Docker pipeline
-    - Nexus Artifact Uploader (To upload the build/docker image to private nexus repo)
+    - `Maven` (Java based)
+    - `NodeJS`
+    - `Pipeline maven integration `(Java based)
+    - `Kubernetes` | `kubernetes credentials` | `kubernetes cli` | `kubernetes client api`
+    - `Docker` | `Docker pipeline`
+    - `Nexus Artifact Uploader` (To upload the build/docker image to private nexus repo)
+    - `Pipeline Utility Steps`
     - NPM Plugin for Node.js-based projects.
     - Docker Pipeline Plugin for Docker image management.
     - Pipeline: AWS Steps (if you use AWS for deploying Docker images).
