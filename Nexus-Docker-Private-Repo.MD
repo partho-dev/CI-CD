@@ -125,3 +125,10 @@
 
 
 
+### Lets see how the Docker image looks on the Nexus
+- In the pipeline, we are pushinh the image as `def app = docker.image("nextjs-sample:${env.BUILD_ID}")`
+- So, on the nexus - we should look for the image on this directory - `nextjs-sample`
+
+- <img width="1661" alt="Nexus-docker-img" src="https://github.com/user-attachments/assets/04a5b873-4d33-4b91-9381-4d672e19f8ea">
+
+
