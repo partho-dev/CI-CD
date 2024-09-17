@@ -2,8 +2,9 @@
 - Go to the npm project cd express_js_project
 - type `npm config get registry` - `https://registry.npmjs.org/` # This is public Repo
 - To update that to use private repo - `npm config set registry=https://private_repo_URL`
-## Create a Private Nexus Repo for Docker images
 
+
+## Create a Private Nexus Repo for Docker images
 - Step 1: `Create an NPM Hosted Repository`
 
     - Log in to Nexus.
@@ -122,6 +123,7 @@ _auth = base64encoded(username:password)
 - Example, we have `express`, `cors` and they are public packages
 - Sometime, we need to have our own private packages which solves some specific problem
 
+
 ### Lets take an example of creating a private npm package named `my-private-package`
 - Create a folder & a name of package is the name of the folder
 ```
@@ -173,6 +175,7 @@ myPrivatePackage();
 - But, behind the scene, the nexus downloads all the packages and stores on its storage
 - Which the developers download
 - Then whats the purpose & benifit
+
 
 ### Benefits of Redirecting NPM Requests Through Nexus
 
