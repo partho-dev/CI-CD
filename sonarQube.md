@@ -174,7 +174,7 @@ sonar.login=your_sonarqube_token
     - In the `Jenkins`: Manage Jenkins - credentials – global – add credentials – secret Text – Add Sonar Token in “secret” field – Give any ID to remember that its for Sonar
 -	To Add the `Sonar Server IP` in Jenkins : In the Jenkins: Manage Jenkins – systems – select SonarQube server(make sure the plugins are installed already) – name(sonar-server) – url(sonar_server_ip:9000) – Add the sonar token
 
-`----------------------------------------------------------------------------------------------------------------------------`
+---
 
 ## Manual process is time consuming and error oriented.
 
