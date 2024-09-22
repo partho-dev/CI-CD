@@ -193,7 +193,7 @@ sonar.login=your_sonarqube_token
 - <img width="910" alt="sonar-qube-dockerise-local" src="https://github.com/user-attachments/assets/952f84a1-847a-4f23-b0ab-529ec634eb54">
 
 
-`----------------------------------------------------------------------------------------------------------------------------`
+---
 
 ## Contaianerised the Sonar
 - See the deployment files inside the folder `sonarQube-container-eks` 
@@ -211,7 +211,8 @@ sonar.login=your_sonarqube_token
 - <img width="665" alt="sonar-containerised" src="https://github.com/user-attachments/assets/2f1db966-d7cf-4887-b5d5-b5dad507640e">
 
 
-`===============================================================================`
+---
+
 ## Setup Jenkins with Sonarqube
 - For Jenkins know about sonar - need the `user token` from Sonar
 

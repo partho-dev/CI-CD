@@ -38,6 +38,20 @@
 
 - ![Jenkins-sonarqube-config](https://github.com/user-attachments/assets/c69454bd-8f24-4782-81ed-47089e0d524f)
 
+***
+
+## <mark> For Cypress testing</mark>
+
+### These ubuntu packages needs to be installed on the Jenkins Server
+
+```
+apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+```
+
+***
+
+## <mark>Lets see how a Jenkins file looks like for Sonar</mark>
+
 ```
 environment {
         SONAR_HOST_URL = 'http://13.233.186.12:9000'

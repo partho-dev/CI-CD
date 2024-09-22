@@ -66,7 +66,10 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
     - Manage jenkins – plugins – available plugins
     - `Pipeline Stage view` (stage view is removed, so need this plugin)
     - `SonarQube Scanner `
+    - 
     - `Xvfb` (this helps run the cypress test on Jenkins)
+        - `apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb` 
+        - These packages needs to be installed directly on the Jenkins(Ubuntu) server
     - `Config file provider` (needed for Nexus to setup credentials)
     - `Maven` (Java based)
     - `NodeJS`
