@@ -83,6 +83,19 @@ nexusArtifactUploader artifacts: [[artifactId: 'my-react-app', file: 'dist', typ
     - Pipeline: AWS Steps (if you use AWS for deploying Docker images).
     - Nexus Artifact Uploader or Pipeline Nexus Publisher Plugin for publishing artifacts to Nexus.
 
+    - For python based projects
+        - Install plugin - `ShiningPanda`
+        - Set the tool ( Manage Jenkins > Global Tool Configuration )
+        - ssh tp jenkins ubuntu & install python packages
+        - `sudo apt update`
+        - `sudo apt install python3 -y` [Install python if its not there]
+        - `sudo apt install python3.10-venv -y`
+        - `python3 -m venv --help`
+        - `sudo apt install python3-pip -y`  # Installs Python package manager
+        - `sudo apt install python3-dev -y`  # Installs development headers
+
+
+
 -	Configure the installed plugins/Tools [ Remember these names that is being used to set these plaugin | These names would be used during the pipeline creation inside the `tools {}` block ]
     - Manage Jenkins – Tools
     - Docker – name(`docker`) – install automatically – add installer(download from docker.com)

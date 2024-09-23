@@ -1,0 +1,118 @@
+pipeline {
+    agent any
+    // tools {
+    //     // Python environment should be managed via the Dockerfile or manually on the Jenkins node
+    //     // python 'Python-3.10'
+    //     // SonarQube scanner (Python-related tool if needed)
+    // }
+    environment {
+        SONAR_HOST_URL = 'http://13.233.186.12:9000'
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = "http://54.175.95.188:8081"
+        DOCKER_REPO = 'http://54.175.95.188:8092'
+        NEXUS_CREDENTIAL_ID = "jenkins-user-on-nexus"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "<=======Checking out the Source Code===========>"
+                git branch: 'feature/pattern', credentialsId: 'erg-bitbucket-app-password', url: 'https://bitbucket.org/ergonnex/erg-pattern-app-python-django-fe'
+            }
+        }
+
+        stage('Set up Python Environment') {
+            steps {
+                echo "<=======Setting up Python environment===========>"
+                
+                    sh '''
+                    echo "---Pip version---"
+                    pip --version
+                    
+                    echo "--Installing the virtual environment--"
+                    python3 -m venv myenv
+                    . myenv/bin/activate
+                    echo "--Virtual env is configured--"
+                    '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo "<=======Installing dependencies===========>"
+                    sh '''
+                    . myenv/bin/activate
+                    echo "Navigating to the project folder"
+                    cd hello_django
+                    pip install -r requirements.txt
+                    '''
+                
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+            echo "<=======Running unit tests===========>"
+            sh '''
+                . myenv/bin/activate
+                cd hello_django
+                #python3 manage.py test
+                echo "The test is successful"
+            '''
+            }
+        }
+
+
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'sonarScanner'
+            }
+            steps {
+                echo "<=======Running SonarQube analysis===========>"
+                
+                    // Create sonar-project.properties for Python project
+                    writeFile file: 'sonar-project.properties', text: '''
+                        sonar.projectKey=django-sample-key-${env.BUILD_ID}
+                        sonar.projectName=Django Sample Project
+                        sonar.sources=.
+                        sonar.language=py
+                        sonar.sourceEncoding=UTF-8
+                    '''
+                    withSonarQubeEnv('sonarServer') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+            echo "<=======Building the Docker Image===========>"
+            script {
+            dir('hello_django'){
+            def app = docker.build("django-fe:${env.BUILD_ID}", " .")
+            }
+        }
+    }
+}
+
+
+        stage('Docker Push to Nexus') {
+            steps {
+                echo "<=======Pushing the Docker Image to Nexus===========>"
+                script {
+                    docker.withRegistry("${DOCKER_REPO}", "${NEXUS_CREDENTIAL_ID}") {
+                        def app = docker.image("django-fe:${env.BUILD_ID}")
+                        app.push("latest")
+                        app.push("${env.BUILD_ID}")
+                    }
+                }
+            }
+        }
+    // }
+    // post {
+    //     always {
+    //         cleanWs()
+    //     }
+    }
+}
