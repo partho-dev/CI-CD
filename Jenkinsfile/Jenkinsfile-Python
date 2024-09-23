@@ -77,6 +77,8 @@ pipeline {
                         sonar.sources=.
                         sonar.language=py
                         sonar.sourceEncoding=UTF-8
+                        sonar.exclusions=myenv/** 
+                        sonar.python.version=3.10 
                     '''
                     withSonarQubeEnv('sonarServer') {
                         sh "${scannerHome}/bin/sonar-scanner"
